@@ -1,0 +1,20 @@
+@model List<Movie>
+@{
+    ViewData["Title"] = "Home Page";
+    ViewData["TitleName"] = "Peliculas Top";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["TitleName"]</h1>
+    <p>Listado de Peliculas</p>
+
+</div>
+
+<ul>
+    @foreach (var x in Model)
+    {
+        <li><a asp-action="Detail" asp-route-id="@x.Code">@x.Name</a></li>
+    }
+</ul>
+
+<a asp-action="Create">Crear</a>

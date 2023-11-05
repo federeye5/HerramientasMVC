@@ -1,0 +1,25 @@
+@model Movie
+
+<form method="post">
+  <div class="mb-3">
+    <label asp-for="Name" class="form-label">Nombre de Pelicula address</label>
+    <input type="text" class="form-control" asp-for="Name">
+    <div class="form-text"></div>
+  </div> 
+  <div class="mb-3">
+    <label asp-for="Category" class="form-label">Categoria de Pelicula address</label>
+    <input type="text" class="form-control" asp-for="Category">
+    <div class="form-text"></div>
+  </div> 
+  <div class="mb-3">
+    <label asp-for="Code" class="form-label">Codigo de Pelicula address</label>
+    <input type="text" class="form-control" asp-for="Code">
+    <div class="form-text"></div>
+  </div> 
+  <div class="mb-3">
+    <label asp-for="Minutes" class="form-label">Longitud de Pelicula address</label>
+    <input type="number" class="form-control" asp-for="Minutes">
+    <div class="form-text"></div>
+  </div> 
+  <button type="submit" class="btn btn-primary">Crear</button>
+</form>
