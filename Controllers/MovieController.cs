@@ -37,7 +37,7 @@ public class MovieController : Controller
 
     }
 
-   
+   //para que el delete funcione hay que crear una vista primero que muestre un  formulario y que le pasemos el codigo de la pelicula y luego ahi se lo pasamos al otro codigo
 
     [HttpPost]
     public IActionResult Delete(string code){
