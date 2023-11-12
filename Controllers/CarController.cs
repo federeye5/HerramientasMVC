@@ -56,7 +56,7 @@ namespace Clase4.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Model,Year,Plate,Make")] Car car)
+        public async Task<IActionResult> Create([Bind("id,Model,Year,Plate,Make,Color")] Car car)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace Clase4.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Model,Year,Plate,Make")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("id,Model,Year,Plate,Make,Color")] Car car)
         {
             if (id != car.id)
             {
