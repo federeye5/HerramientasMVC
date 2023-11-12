@@ -29,6 +29,8 @@ namespace Clase4.Controllers
                 query = query.Where(x => x.Name.Contains(nameFilter)); //sentencia LinQ forma metodo
             }
 
+            var restaurants = query.Include(x => x.Restaurants).Select(x => x.Restaurants).ToList();
+
             var model = new MenuViewModel();
             model.Menus = await query.ToListAsync();
 
@@ -45,14 +47,21 @@ namespace Clase4.Controllers
                 return NotFound();
             }
 
-            var menu = await _context.Menu
-                .FirstOrDefaultAsync(m => m.id == id);
+            var menu = await _context.Menu.Include(x => x.Restaurants).FirstOrDefaultAsync(m => m.id == id);
             if (menu == null)
             {
                 return NotFound();
             }
+            var viewModel = new MenuDetailViewModel();
+            viewModel.Name = menu.Name;
+            viewModel.Type = menu.Type.ToString();//vuelve el valor de la propiedad y no la posicion
+            viewModel.Calories = menu.Calories;
+            viewModel.IsVegetarian = menu.IsVegetarian;
+            viewModel.Restaurants = menu.Restaurants != null? menu.Restaurants : new List<Restaurant>(); //funcion ternaria explica si es null mande una lista vacia pero sino que mande los datos
+            
 
-            return View(menu);
+
+            return View(viewModel);
         }
 
         // GET: Menu/Create

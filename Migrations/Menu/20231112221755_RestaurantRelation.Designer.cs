@@ -2,6 +2,7 @@
 using Clase4.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clase4.Migrations.Menu
 {
     [DbContext(typeof(MenuContext))]
-    partial class MenuContextModelSnapshot : ModelSnapshot
+    [Migration("20231112221755_RestaurantRelation")]
+    partial class RestaurantRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -71,7 +74,7 @@ namespace Clase4.Migrations.Menu
 
                     b.HasIndex("MenuId");
 
-                    b.ToTable("Restaurant");
+                    b.ToTable("restaurants");
                 });
 
             modelBuilder.Entity("Clase4.Models.Restaurant", b =>

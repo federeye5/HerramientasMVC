@@ -15,5 +15,13 @@ namespace Clase4.Data
         }
 
         public DbSet<Clase4.Models.Menu> Menu { get; set; } = default!;
+        public DbSet<Clase4.Models.Restaurant> Restaurant { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)//Config de la relacion con el Restaurante
+        {
+            modelBuilder.Entity<Menu>().HasMany(x => x.Restaurants).WithOne(x =>x.Menu).HasForeignKey(x => x.MenuId);
+        }
+
+        
     }
 }
