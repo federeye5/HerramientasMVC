@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Clase4.Data;
 using Clase4.Models;
+using Clase4.ViewModels;
 
 namespace Clase4.Controllers
 {
@@ -20,10 +21,19 @@ namespace Clase4.Controllers
         }
 
         // GET: Menu
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameFilter)
         {
+            var query = from menu in _context.Menu select menu;//sentencia LinQ, Crea una Query pero no se ejecuta
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                query = query.Where(x => x.Name.Contains(nameFilter)); //sentencia LinQ forma metodo
+            }
+
+            var model = new MenuViewModel();
+            model.Menus = await query.ToListAsync();
+
               return _context.Menu != null ? 
-                          View(await _context.Menu.ToListAsync()) :
+                          View(model) :
                           Problem("Entity set 'MenuContext.Menu'  is null.");
         }
 

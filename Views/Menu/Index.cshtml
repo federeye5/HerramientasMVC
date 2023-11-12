@@ -1,4 +1,5 @@
-@model IEnumerable<Clase4.Models.Menu>
+@using Clase4.ViewModels
+@model MenuViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -9,29 +10,38 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<div class="row">
+    <form method="get" asp-action="Index" asp-controller="Menu">
+        <div class="col-6 form-group">
+            <input class="form-control" asp-for="NameFilter">
+
+        </div>
+        <button class="btn" type="submit">Buscar</button>
+    </form>
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsVegetarian)
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().IsVegetarian)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Calories)
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Calories)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Menus) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
