@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Clase4.Data;
 using Clase4.Models;
+using Clase4.ViewModels;
+using System.Net.Sockets;
+using System.ComponentModel.DataAnnotations;
 
 namespace Clase4.Controllers
 {
@@ -22,7 +25,7 @@ namespace Clase4.Controllers
         // GET: Restaurant
         public async Task<IActionResult> Index()
         {
-            var menuContext = _context.Restaurant.Include(r => r.Menu);
+            var menuContext = _context.Restaurant.Include(r => r.Menus);
             return View(await menuContext.ToListAsync());
         }
 
@@ -35,8 +38,8 @@ namespace Clase4.Controllers
             }
 
             var restaurant = await _context.Restaurant
-                .Include(r => r.Menu)
-                .FirstOrDefaultAsync(m => m.id == id);
+                .Include(r => r.Menus)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (restaurant == null)
             {
                 return NotFound();
@@ -48,7 +51,7 @@ namespace Clase4.Controllers
         // GET: Restaurant/Create
         public IActionResult Create()
         {
-            ViewData["MenuId"] = new SelectList(_context.Menu, "id", "id");
+            ViewData["Menus"] = new SelectList(_context.Menu.ToList(),"id","Name");//el ToList trae los datos de query a datos que se puedan ver
             return View();
         }
 
@@ -57,18 +60,24 @@ namespace Clase4.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Name,Adress,Email,Phone,MenuId")] Restaurant restaurant)
+        public async Task<IActionResult> Create([Bind("Id,Name,Adress,Email,Phone,MenuIds")] RestaurantCreateViewModel restaurantView)
         {
-            //ToDo: Crear ViewModel
-            ModelState.Remove("Menu");
             if (ModelState.IsValid)
             {
+                var menus = _context.Menu.Where(x=>restaurantView.MenuIds.Contains(x.id)).ToList();
+                var restaurant = new Restaurant{
+                    Name = restaurantView.Name,
+                    Adress = restaurantView.Adress,
+                    Email = restaurantView.Email,
+                    Phone = restaurantView.Phone,
+                    Menus = menus
+                };//Lo que pasa aca es que el _context pedia un restaurant entonces lo tenemos que mapear para cambiar el VM a Restaurant
+                
                 _context.Add(restaurant);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuId"] = new SelectList(_context.Menu, "id", "id", restaurant.MenuId);
-            return View(restaurant);
+            return View(restaurantView);
         }
 
         // GET: Restaurant/Edit/5
@@ -84,7 +93,7 @@ namespace Clase4.Controllers
             {
                 return NotFound();
             }
-            ViewData["MenuId"] = new SelectList(_context.Menu, "id", "id", restaurant.MenuId);
+            // ViewData["MenuId"] = new SelectList(_context.Menu, "id", "id", restaurant.MenuId);
             return View(restaurant);
         }
 
@@ -95,7 +104,7 @@ namespace Clase4.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,Name,Adress,Email,Phone,MenuId")] Restaurant restaurant)
         {
-            if (id != restaurant.id)
+            if (id != restaurant.Id)
             {
                 return NotFound();
             }
@@ -109,7 +118,7 @@ namespace Clase4.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RestaurantExists(restaurant.id))
+                    if (!RestaurantExists(restaurant.Id))
                     {
                         return NotFound();
                     }
@@ -120,7 +129,6 @@ namespace Clase4.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuId"] = new SelectList(_context.Menu, "id", "id", restaurant.MenuId);
             return View(restaurant);
         }
 
@@ -133,8 +141,8 @@ namespace Clase4.Controllers
             }
 
             var restaurant = await _context.Restaurant
-                .Include(r => r.Menu)
-                .FirstOrDefaultAsync(m => m.id == id);
+                .Include(r => r.Menus)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (restaurant == null)
             {
                 return NotFound();
@@ -164,7 +172,7 @@ namespace Clase4.Controllers
 
         private bool RestaurantExists(int id)
         {
-          return (_context.Restaurant?.Any(e => e.id == id)).GetValueOrDefault();
+          return (_context.Restaurant?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

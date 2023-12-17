@@ -24,9 +24,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Phone)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Menu)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -45,9 +45,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Phone)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Menu.id)
-            </td>
+            </td> *@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.id">Details</a> |

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clase4.Migrations.Menu
 {
     [DbContext(typeof(MenuContext))]
-    [Migration("20231112221755_RestaurantRelation")]
-    partial class RestaurantRelation
+    [Migration("20231217214131_InitialMigrationMenuManyToMany")]
+    partial class InitialMigrationMenuManyToMany
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,25 +72,37 @@ namespace Clase4.Migrations.Menu
 
                     b.HasKey("id");
 
-                    b.HasIndex("MenuId");
-
-                    b.ToTable("restaurants");
+                    b.ToTable("Restaurant");
                 });
 
-            modelBuilder.Entity("Clase4.Models.Restaurant", b =>
+            modelBuilder.Entity("MenuRestaurant", b =>
                 {
-                    b.HasOne("Clase4.Models.Menu", "Menu")
-                        .WithMany("Restaurants")
-                        .HasForeignKey("MenuId")
+                    b.Property<int>("Menusid")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Restaurantsid")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Menusid", "Restaurantsid");
+
+                    b.HasIndex("Restaurantsid");
+
+                    b.ToTable("MenuRestaurant");
+                });
+
+            modelBuilder.Entity("MenuRestaurant", b =>
+                {
+                    b.HasOne("Clase4.Models.Menu", null)
+                        .WithMany()
+                        .HasForeignKey("Menusid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Menu");
-                });
-
-            modelBuilder.Entity("Clase4.Models.Menu", b =>
-                {
-                    b.Navigation("Restaurants");
+                    b.HasOne("Clase4.Models.Restaurant", null)
+                        .WithMany()
+                        .HasForeignKey("Restaurantsid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

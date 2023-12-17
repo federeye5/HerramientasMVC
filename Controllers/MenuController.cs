@@ -77,6 +77,7 @@ namespace Clase4.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,Name,Price,Type,IsVegetarian,Calories")] Menu menu)
         {
+            //crear VM para que Restaurants sea valido
             if (ModelState.IsValid)
             {
                 _context.Add(menu);
